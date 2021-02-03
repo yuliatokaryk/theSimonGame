@@ -5,7 +5,6 @@ var level = 0;
 var started = false;
 
 // start game
-
 $(document).keypress(function() {
     if (!started) {
       nextSequence();
@@ -14,7 +13,6 @@ $(document).keypress(function() {
   });
 
 // computer plays
-
 function nextSequence() {
 
 // change level
@@ -39,7 +37,6 @@ function nextSequence() {
 };
 
 // user plays
-
 $(".btn").click(function() {
 
 // get id of user selected color
@@ -52,47 +49,44 @@ $(".btn").click(function() {
 
     animatePress(userChosenColour);
 
-// add chosen color to list 
+// add selected color to list 
     
     userClickedPattern.push(userChosenColour);
 
-    var a = userClickedPattern.length - 1;
-
-    if (gamePattern[a] != userChosenColour) {
-        endGame()
-    }
-
-// checks if user clicked enougth
-    if (userClickedPattern.length === level) {
-        checkAnswer(level);
-    };
+// check answer
+    checkAnswer(userChosenColour);
 
 });
 
-function checkAnswer(currentLevel) {
+// check if user selects correct colors
+function checkAnswer(userColor) {
 
-    var correctColors = 0
-    
-    for (var i = 0; i < currentLevel; i ++){
-        if (userClickedPattern[i] === gamePattern[i]){
-            correctColors ++
-        } else {
-            endGame();
-        }
-    }
+    if (gamePattern[userClickedPattern.length - 1] != userColor) {
+        endGame();
+    };
 
-    if (correctColors === currentLevel){
-        userClickedPattern = [];
-        setTimeout(function() {
-            nextSequence();
-            }, 700);
-        }
-}
+    if (userClickedPattern.length == level) {
+        nextStep();
+    };
+};
+
+function nextStep() {
+
+    userClickedPattern = [];
+
+    setTimeout(function() {
+        nextSequence();
+        }, 700);
+
+};
 
 function endGame() {
-    started = false;
-    $("#level-title").text("Game over. Press A Key to Start again");
-}
+    if (started != false) {
+        level = 0;
+        started = false;
+        $("#level-title").text("Game over. Press A Key to Start again");
+    };
+};
 
 // add animation and sound
 
