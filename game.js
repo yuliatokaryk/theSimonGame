@@ -8,46 +8,89 @@ var level = 0;
 
 var started = false;
 
+var correctColors = 0
+
+// start game
+
 $(document).keypress(function() {
     if (!started) {
-      $("#level-title").text("Level " + level);
       nextSequence();
       started = true;
     }
   });
 
-$(".btn").click(function() {
-
-    var userChosenColour = $(this).attr("id");
-
-    userClickedPattern.push(userChosenColour);
-
-    playSound(userChosenColour);
-
-    animatePress(userChosenColour);
-
-    if (userClickedPattern.length == level) {
-        checkAnswer(level);
-    };
-
-});
-
 function nextSequence() {
 
+ // changes level
     level++;
 
     $("#level-title").text("Level " + level);
 
+// chooses random number
     var randomNumber = Math.floor(Math.random() * 4);
 
     var randomChosenColour = buttonColours[randomNumber];
 
+// adds random color to game Pattern
+
     gamePattern.push(randomChosenColour);
+
+// adds animation and sound to selected color
 
     $("#" + randomChosenColour).fadeIn(100).fadeOut(100).fadeIn(100);
 
     playSound(randomChosenColour);
 };
+
+$(".btn").click(function() {
+
+// gets id of user choosen color
+
+    var userChosenColour = $(this).attr("id");
+
+// adds animation and sound
+
+    playSound(userChosenColour);
+
+    animatePress(userChosenColour);
+
+// adds chosen color to list 
+    
+    userClickedPattern.push(userChosenColour);
+
+// checks if user clicked enougth
+    if (userClickedPattern.length === level) {
+        checkAnswer(level);
+    };
+
+});
+
+function checkAnswer(currentLevel) {
+
+    var correctColors = 0
+    
+    for (var i = 0; i < currentLevel; i ++){
+        if (userClickedPattern[i] === gamePattern[i]){
+            correctColors ++
+        } else {
+            endGame();
+        }
+    }
+
+    if (correctColors === currentLevel){
+        userClickedPattern = [];
+        setTimeout(function() {
+            nextSequence();
+            }, 700);
+        }
+}
+
+function endGame() {
+    started = false;
+    $("#level-title").text("Game over. Press A Key to Start again");
+}
+
+// add animation and sound
 
 function playSound(name) {
 
@@ -63,16 +106,3 @@ function animatePress(currentColour){
     }, 100);
 
 };
-
-function checkAnswer(currentLevel) {
-    for (var i = 0; i < currentLevel; i ++){
-        if (userClickedPattern[i] === gamePattern[i]){
-            setTimeout(function() {
-                nextSequence();
-                }, 700);
-        } else {
-            $("#level-title").text("Game over")
-        }
-    }
-
-}
