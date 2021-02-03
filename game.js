@@ -39,7 +39,8 @@ function nextSequence() {
 $(".btn").click(function() {
     
     var userChosenColour = $(this).attr("id");
-    
+
+    playSound(userChosenColour);
     animatePress(userChosenColour);
 
     if (gamePattern.length != 0) {
@@ -56,8 +57,6 @@ function checkAnswer(userColor) {
     if (gamePattern[userClickedPattern.length - 1] != userColor) {
         endGame();
         playSound('wrong');
-    } else {
-        playSound(userColor);
     };
 
     if (userClickedPattern.length == level) {
