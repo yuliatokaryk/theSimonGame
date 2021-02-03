@@ -9,53 +9,45 @@ $(document).keypress(function() {
     if (!started) {
       nextSequence();
       started = true;
-    }
-  });
+      userClickedPattern = [];
+    };
+});
 
-// computer plays
+
+// computer plays: change level and show it on screen; select random color; 
+// add random color to gamePattern; 
+// add animation and sound to selected color
 function nextSequence() {
 
-// change level
     level++;
-
     $("#level-title").text("Level " + level);
 
-// select random number
+
     var randomNumber = Math.floor(Math.random() * 4);
-
     var randomChosenColour = buttonColours[randomNumber];
-
-// add random color to gamePattern
 
     gamePattern.push(randomChosenColour);
 
-// add animation and sound to selected color
-
     $("#" + randomChosenColour).fadeIn(100).fadeOut(100).fadeIn(100);
-
     playSound(randomChosenColour);
 };
 
-// user plays
+
+// user plays: get id of user selected color; add animation and sound; 
+// add selected color to list; check answer 
+
 $(".btn").click(function() {
-
-// get id of user selected color
-
+    
     var userChosenColour = $(this).attr("id");
-
-// add animation and sound
-
-    playSound(userChosenColour);
-
+    
     animatePress(userChosenColour);
 
-// add selected color to list 
+    if (gamePattern.length != 0) {
     
-    userClickedPattern.push(userChosenColour);
+        userClickedPattern.push(userChosenColour);
 
-// check answer
-    checkAnswer(userChosenColour);
-
+        checkAnswer(userChosenColour);
+    };
 });
 
 // check if user selects correct colors
@@ -63,6 +55,9 @@ function checkAnswer(userColor) {
 
     if (gamePattern[userClickedPattern.length - 1] != userColor) {
         endGame();
+        playSound('wrong');
+    } else {
+        playSound(userColor);
     };
 
     if (userClickedPattern.length == level) {
@@ -77,16 +72,17 @@ function nextStep() {
     setTimeout(function() {
         nextSequence();
         }, 700);
-
 };
 
 function endGame() {
-    if (started != false) {
-        gamePattern = [];
-        level = 0;
-        started = false;
-        $("#level-title").text("Game over. Press A Key to Start again");
-    };
+    level = 0;
+    started = false;
+    gamePattern = [];
+    $("#level-title").text("Game over. Press A Key to Start again");
+    $("body").css({"background-color":"red"});
+    setTimeout(function() {
+        $("body").css({"background-color":"#011F3F"});
+        }, 500);
 };
 
 // add animation and sound
