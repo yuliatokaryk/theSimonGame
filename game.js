@@ -82,6 +82,7 @@ function nextStep() {
 
 function endGame() {
     if (started != false) {
+        gamePattern = [];
         level = 0;
         started = false;
         $("#level-title").text("Game over. Press A Key to Start again");
