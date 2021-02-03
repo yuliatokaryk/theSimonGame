@@ -1,14 +1,8 @@
 var buttonColours = ["red", "blue", "green", "yellow"];
-
 var gamePattern = [];
-
 var userClickedPattern = [];
-
 var level = 0;
-
 var started = false;
-
-var correctColors = 0
 
 // start game
 
@@ -19,44 +13,54 @@ $(document).keypress(function() {
     }
   });
 
+// computer plays
+
 function nextSequence() {
 
- // changes level
+// change level
     level++;
 
     $("#level-title").text("Level " + level);
 
-// chooses random number
+// select random number
     var randomNumber = Math.floor(Math.random() * 4);
 
     var randomChosenColour = buttonColours[randomNumber];
 
-// adds random color to game Pattern
+// add random color to gamePattern
 
     gamePattern.push(randomChosenColour);
 
-// adds animation and sound to selected color
+// add animation and sound to selected color
 
     $("#" + randomChosenColour).fadeIn(100).fadeOut(100).fadeIn(100);
 
     playSound(randomChosenColour);
 };
 
+// user plays
+
 $(".btn").click(function() {
 
-// gets id of user choosen color
+// get id of user selected color
 
     var userChosenColour = $(this).attr("id");
 
-// adds animation and sound
+// add animation and sound
 
     playSound(userChosenColour);
 
     animatePress(userChosenColour);
 
-// adds chosen color to list 
+// add chosen color to list 
     
     userClickedPattern.push(userChosenColour);
+
+    var a = userClickedPattern.length - 1;
+
+    if (gamePattern[a] != userChosenColour) {
+        endGame()
+    }
 
 // checks if user clicked enougth
     if (userClickedPattern.length === level) {
